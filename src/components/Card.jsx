@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {TbListDetails} from "react-icons/tb";
 import {TbShoppingBagCheck} from "react-icons/tb";
 import { MdDeleteOutline } from "react-icons/md"
@@ -6,19 +7,17 @@ import { MdDeleteOutline } from "react-icons/md"
 import { productQuantity, shortenText } from "../helper/helper";
 
 import styles from "./Card.module.css";
-// import { useCart } from "../context/CartContext";
+import { addItem, decrease, increase, removeItem } from "../features/cart/cartSlice";
 
 function Card({data}) {
     const {id, title, image, price} = data;
-    // const [state, dispatch] = useCart();
+    const dispatch = useDispatch();
+    const state = useSelector(store => store.cart);
 
-    // const quantity = productQuantity(state, id);
-    const quantity = 0;
-   
+    console.log(state);
+    
 
-    const clickHandler = (type) => {
-      // dispatch({type: type, payload: data})
-    }
+    const quantity = productQuantity(state, id);   
 
   return (
     <div className={styles.card}>
@@ -30,14 +29,14 @@ function Card({data}) {
             <div>
               {
                 quantity === 1 && (
-                  <button onClick={() => clickHandler("REMOVE_ITEM")}>
+                  <button onClick={() => dispatch(removeItem(data))}>
                   <MdDeleteOutline />
                 </button>
                 )
               }
               {
                 quantity > 1 && (
-                  <button onClick={() => clickHandler("DECREASE")}>
+                  <button onClick={() => dispatch(decrease(data))}>
                   -
                 </button>
                 )
@@ -45,11 +44,11 @@ function Card({data}) {
               <span>{!!quantity && quantity}</span>
               {
                 quantity === 0 ? (
-                  <button onClick={() => clickHandler("ADD_ITEM")}>
+                  <button onClick={() => dispatch(addItem(data))}>
                   <TbShoppingBagCheck />
                 </button>
                 ) : (
-                  <button onClick={() => clickHandler("INCREASE")}>
+                  <button onClick={() => dispatch(increase(data))}>
                   +
                 </button>
                 )
