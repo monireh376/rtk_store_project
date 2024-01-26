@@ -12,10 +12,7 @@ import { addItem, decrease, increase, removeItem } from "../features/cart/cartSl
 function Card({data}) {
     const {id, title, image, price} = data;
     const dispatch = useDispatch();
-    const state = useSelector(store => store.cart);
-
-    console.log(state);
-    
+    const state = useSelector(store => store.cart);    
 
     const quantity = productQuantity(state, id);   
 
